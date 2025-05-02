@@ -1,8 +1,8 @@
 const SecCred = require('../dist/index.js');
 
-const resource = process.env[2];
-const username = process.env[3];
-const password = process.env[4];
+const resource = process.argv[2];
+const username = process.argv[3];
+const password = process.argv[4];
 
 if (!resource || !username || !password) {
   console.log('Usage: set <resource> <username> <password>');
