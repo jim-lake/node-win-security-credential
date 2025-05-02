@@ -8,7 +8,7 @@ Napi::Value GetPassword(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
 
   if (info.Length() < 2 || !info[0].IsString() || !info[1].IsString()) {
-    Napi::TypeError::New(env, "Expected two string arguments")
+    Napi::TypeError::New(env, "Expected 2 string arguments")
         .ThrowAsJavaScriptException();
     return env.Null();
   }
@@ -37,7 +37,7 @@ Napi::Value SetPassword(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
   if (info.Length() < 3 || !info[0].IsString() || !info[1].IsString() ||
       !info[2].IsString()) {
-    Napi::TypeError::New(env, "Expected two string arguments")
+    Napi::TypeError::New(env, "Expected 3 string arguments")
         .ThrowAsJavaScriptException();
     return env.Null();
   }
@@ -46,11 +46,10 @@ Napi::Value SetPassword(const Napi::CallbackInfo &info) {
   std::string password = info[2].As<Napi::String>();
 
   try {
-    PasswordCredential pc = new PasswordCredential(winrt::to_hstring(resource),
-                                                   winrt::to_hstring(username),
-                                                   winrt::to_hstring(password));
     PasswordVault vault;
-    vault.Add(pc);
+    vault.Add(PasswordCredential(winrt::to_hstring(resource),
+                                 winrt::to_hstring(username),
+                                 winrt::to_hstring(password)));
   } catch (const winrt::hresult_error &e) {
     Napi::Error::New(env, "Failed to set password: " + std::to_string(e.code()))
         .ThrowAsJavaScriptException();
