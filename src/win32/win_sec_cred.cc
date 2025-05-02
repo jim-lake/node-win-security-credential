@@ -21,14 +21,17 @@ Napi::Value GetPassword(const Napi::CallbackInfo &info) {
     PasswordCredential cred = vault.Retrieve(winrt::to_hstring(resource),
                                              winrt::to_hstring(username));
     cred.RetrievePassword();
-    std::string password winrt::to_string(cred.Password());
+    std::string password = winrt::to_string(cred.Password());
     return Napi::String::New(env, password);
   } catch (const winrt::hresult_error &e) {
     Napi::Error::New(env,
                      "Failed to retrieve password: " + std::to_string(e.code()))
         .ThrowAsJavaScriptException();
-    return env.Null();
+  } catch (...) {
+    Napi::Error::New(env, "Failed to get password")
+        .ThrowAsJavaScriptException();
   }
+  return env.Null();
 }
 Napi::Value SetPassword(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
@@ -43,13 +46,16 @@ Napi::Value SetPassword(const Napi::CallbackInfo &info) {
   std::string password = info[2].As<Napi::String>();
 
   try {
+    PasswordCredential pc = new PasswordCredential(winrt::to_hstring(resource),
+                                                   winrt::to_hstring(username),
+                                                   winrt::to_hstring(password));
     PasswordVault vault;
-    PasswordCredential cred =
-        vault.Add(winrt::to_hstring(resource), winrt::to_hstring(username),
-                  winrt::to_hstring(password));
+    vault.Add(pc);
   } catch (const winrt::hresult_error &e) {
-    Napi::Error::New(env,
-                     "Failed to retrieve password: " + std::to_string(e.code()))
+    Napi::Error::New(env, "Failed to set password: " + std::to_string(e.code()))
+        .ThrowAsJavaScriptException();
+  } catch (...) {
+    Napi::Error::New(env, "Failed to set password")
         .ThrowAsJavaScriptException();
   }
   return env.Null();
