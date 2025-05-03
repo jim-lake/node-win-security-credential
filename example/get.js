@@ -14,5 +14,5 @@ try {
   const password = SecCred.getPassword(resource, username);
   console.log('got password:', password);
 } catch (e) {
-  console.error('threw:', e);
+  console.error('threw:', e?.errno, e);
 }

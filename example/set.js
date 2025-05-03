@@ -14,5 +14,5 @@ console.log('set:', resource, username, password);
 try {
   SecCred.setPassword(resource, username, password);
 } catch (e) {
-  console.error('threw:', e);
+  console.error('threw:', e?.errno, e);
 }

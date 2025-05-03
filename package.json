@@ -16,6 +16,7 @@
     "dist/"
   ],
   "scripts": {
+    "configure": "node-gyp configure",
     "build": "node-gyp build && tsc && npm run pretty",
     "pretty": "prettier --write binding.gyp --parser json && prettier -u --write src/**/*.ts dist/**/*.js dist/**/*.ts example/**/* && clang-format -i src/win32/*",
     "lint": "eslint src"
