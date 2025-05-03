@@ -61,7 +61,7 @@ Napi::Value SetPassword(const Napi::CallbackInfo &info) {
 }
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   // Initialize COM apartment for WinRT
-  init_apartment();
+  //init_apartment();
   exports.Set("getPassword", Napi::Function::New(env, GetPassword));
   exports.Set("setPassword", Napi::Function::New(env, SetPassword));
   return exports;

@@ -1,6 +1,6 @@
 {
   "name": "node-win-security-credential",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Windows Security Credential API wrapper",
   "keywords": [
     "win32",
